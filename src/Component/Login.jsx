@@ -6,6 +6,40 @@ const User = {
     pw: 'test2323@@'
 }
 
+const initKakao = () => {
+    const jsKey = "470691419cbac6fe76de0f7d0600a3bf";
+    const Kakao = window.Kakao;
+    if (Kakao && !Kakao.isInitialized()) {
+      Kakao.init(jsKey);
+      console.log(Kakao.isInitialized());
+    }
+  };
+
+initKakao();
+
+const kakaoLogin = () => {
+    const Kakao = window.Kakao;
+
+    Kakao.Auth.login({
+      success() {
+        Kakao.API.request({
+          url: "/v2/user/me",
+          success(res) {
+            console.log(JSON.stringify(res));
+            const kakaoAccount = res.kakao_account;
+            console.log(kakaoAccount);
+          },
+          fail(error) {
+            console.log(error);
+          },
+        });
+      },
+      fail(error) {
+        console.log(error);
+      },
+    });
+};
+
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -138,7 +172,7 @@ export default function Login() {
                         </a>
                     </li>
                     <li className='sns-login-item'>
-                        <a href='javascript:kakaoLogin();'>
+                        <a href='/mypage' onClick={kakaoLogin}>
                             <div className='kakao'>
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" className="bi bi-chat-fill" viewBox="0 0 16 16">
                                     <path d="M8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6-.097 1.016-.417 2.13-.771 2.966-.079.186.074.394.273.362 2.256-.37 3.597-.938 4.18-1.234A9.06 9.06 0 0 0 8 15z"/>
